@@ -1,0 +1,39 @@
+学习自定插件的时候在给自定义插件添加自定义属性的时候发现在配置期是拿不到属性的值的，只有在运行期才能拿到属性的值
+
+project.extensions.create("testExt", MyPluginTestClass)
+        System.out.println("************${project.testExt}************")
+        System.out.println("************${project.testExt.modelName}************")
+        System.out.println("************${project.extensions.findByName("testExt") == null}************")
+        System.out.println("************${project.extensions.findByName("testExt").hasProperty("modelName")}************")
+
+        def android = project.extensions.getByType(AppExtension)
+        if (project.plugins.hasPlugin(AppPlugin)) {
+            android.applicationVariants.all { variant ->
+                System.out.println("************${project.extensions.findByName("testExt").getProperties().get("modelName")}************")
+                System.out.println("************${project.extensions.getByName("testExt").modelName}************")
+                def name = variant.name
+                def versionName = variant.versionName
+                def versionCode = variant.versionCode
+
+                System.out.println("************${name}************")
+                System.out.println("************${versionName}************")
+                System.out.println("************${versionCode}************")
+        }
+}
+
+
+输出
+
+************plugin start************
+************default************
+************default************
+************false************
+************true************
+************plugin end************
+Incremental java compilation is an incubating feature.
+************mycode************
+************mycode************
+
+
+
+
